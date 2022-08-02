@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+
+    <title>AMR - React Native Integration</title>
+
+    <!-- Styles -->
+    <link href="assets/css/theDocs.all.min.css" rel="stylesheet">
+    <link href="assets/css/custom.css" rel="stylesheet">
+    <link href="assets/css/skin/skin-blue.css" rel="stylesheet">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Raleway:100,300,400,500%7CLato:300,400" rel="stylesheet"
+          type="text/css">
+
+    <!-- Scripts -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+    <script src="adnetworks.js" type="text/javascript"></script>
+    <script src="https://raw.githubusercontent.com/admost/amrandroid/master/docs/android_data.json?"></script>
+
+    <!-- Favicons -->
+    <link rel="icon" href="https://dashboard.admost.com/Assets/img/admostfavicon.png">
+</head>
+
+<body data-spy="scroll" data-target=".sidebar" data-offset="200">
+
+<header class="site-header navbar-transparent sticky">
+
+    <nav class="navbar navbar-default">
+        <div class="container">
+
+            <!-- Toggle buttons and brand -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar"
+                        aria-expanded="true" aria-controls="navbar">
+                    <span class="glyphicon glyphicon-option-vertical"></span>
+                </button>
+
+                <button type="button" class="navbar-toggle for-sidebar" data-toggle="offcanvas">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="http://admost.github.io"><img src="assets/img/logo-white.svg" alt="logo"></a>
+
+            </div>
+            <!-- END Toggle buttons and brand -->
+
+            <!-- Top navbar -->
+            <div id="navbar" class="navbar-collapse collapse" aria-expanded="true" role="banner">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="active"><a href="index.html">Documentation</a></li>
+                    <li><a target="_blank" href="https://admost.github.io/privacy.html">Privacy Compliance</a></li>
+                    <li><a href="faq.html">FAQ</a></li>
+                    <li>
+                        <a target="_blank" href="https://github.com/admost/amrreactnative">
+                        <i class="fa fa-github"></i>&nbsp;&nbsp;Github</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- END Top navbar -->
+        </div>
+    </nav>
+    <!-- END Top navbar & branding -->
+
+    <!-- Banner -->
+    <div class="banner auto-size" style="background-color: #0175C2">
+            <div class="container text-white">
+                <h1><i class="react-icon"></i>&nbsp; &nbsp;React Native Integration Guide</h1>
+                <h5>This is the easiest way to implement AMR React Native SDK and ad networks to your current Mobile App. </h5>
+            </div>
+        </div>
+        <!-- END Banner -->
+</header>
+
+
+<main class="container">
+    <div class="row">
+        <!-- Sidebar -->
+        <aside class="col-sm-3 sidebar">
+            <ul class="nav sidenav dropable sticky">
+                <li><a href="#prerequisites">Prerequisites</a></li>
+                <li>
+                    <a href="#setup">Setup</a>
+                    <ul>
+                        <li>
+                            <a href="#ios-setup-notes">IOS Setup Notes</a>
+                            <ul style="display: block;">
+                                <li><a href="#required-files-ios">Required Files</a></li>
+                                <li><a href="#edit-files-ios">Edit Files</a></li>
+                                <li><a href="#skadnetwork">SKAdNetwork </a></li>
+                                <li><a href="#ios14">iOS14 </a> </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#android-setup-notes">Android Setup Notes</a>
+                            <ul style="display: block;">
+                                <li><a href="#required-files-android">Required Files</a></li>
+                                <li><a href="#edit-files-android">Edit Files</a></li>
+                                <li><a href="#proguard">Proguard</a></li>
+                            </ul>
+                        </li>
+                        
+                    </ul>
+                </li>
+                <li>
+                    <a href="#usage">Usage</a>
+                    <ul>
+                        <li><a href="#initialization">Initialization</a></li>
+                            <ul style="display: block;">
+                                <li><a href="#initgdpr">GDPR and CCPA</a></li>
+                            </ul>
+                        <li><a href="#banner-ads">Banner Ads</a></li>
+                        </li>
+                        <li><a href="#interstitial-ads">Interstitial Ads</a></li>
+                        <li><a href="#rewarded-video-ads">Rewarded Video Ads</a></li>
+                      
+                    </ul>
+                </li>
+                <li><a href="#extras">Extras</a>
+                    <ul>
+                        <li><a href="#senduserid">Setting Application User Id</a></li>
+                        <li><a href="#adjustintegration">Adjust Integration </a></li>
+                        <li><a href="#appsflyerintegration">AppsFlyer Integration </a></li>
+                        <li><a href="#appprivacy">Apple App Privacy (IOS Only) </a></li>
+                    </ul>
+                </li>
+            </ul>
+
+        </aside>
+        <!-- END Sidebar -->
+
+        <!-- Main content -->
+        <article class="col-sm-9 main-content" role="main">
+            <section>
+                <h2 id="prerequisites">Prerequisites</h2>
+                <ul>
+                    <li>Enable AndroidX in your project. <a href="https://developer.android.com/jetpack/androidx/migrate" target="_blank">For more information</a>.</li>
+                    <li>Application Id provided in Admost Mediation Dashboard.</li>
+                    <li>Zone Id(s) provided in Admost Mediation Dashboard.</li>
+                </ul>
+
+                <p>For testing you can use following Ids;</p>
+<h5>IOS Test Ids</h5>
+                <pre><code class="language-markup">
+Application Id: "15066ddc-9c18-492c-8185-bea7e4c7f88c"
+Banner Zone Id: "b4009772-de04-42c4-bbaa-c18da9e4a1ab"
+Interstitial Zone Id: "39f74377-5682-436a-9338-9d1c4df410bd"
+RewardedVideo Zone Id: "2bdefd44-5269-4cbc-b93a-373b74a2f067"
+                </code></pre>
+                <h5>Android Test Ids</h5>
+                <pre><code class="language-markup">
+Application Id: "6cc8e89a-b52a-4e9a-bb8c-579f7ec538fe"
+Banner Zone Id: "9fb970db-7d96-4ef2-ac8c-d88ec22270ff"
+Interstitial Zone Id: "f99e409b-f9ab-4a2e-aa9a-4d143e6809ae"
+RewardedVideo Zone Id: "88cfcfd0-2f8c-4aba-9f36-cc0ac99ab140"
+                </code></pre>
+            </section>
+            <section>
+                <h2 id="setup">Setup</h2>
+                Install a library with native dependencies:
+                <pre><code class="language-markup"> 
+                npm install @up-inside/react-native-admost --save
+                </code>
+                </pre>
+                <p>--save or --save-dev flag is very important for this step. React Native will link your libs based on dependencies and devDependencies in your package.json file.</p>
+                <p>Run pod install in our ios directory in order to link it to our native iOS project. A shortcut for doing this without switching to the ios directory is to run npx pod-install.</p>
+                <pre><code class="language-markup"> 
+                npx pod-install
+                </code>
+                </pre>
+                <p>If your iOS project is using CocoaPods (contains Podfile) and linked library has podspec file, then npx react-native link will link library using Podfile. To support non-trivial Podfiles add # Add new pods below this line comment to places where you expect pods to be added.                </p>
+                <p>Please refer to following table for required and optional packages for your target.</p>
+               
+               
+                <div class="table-responsive">
+                    <table class="table table-info" id="adnetwork-table">
+                        <thead>
+                        <tr>
+                            <th>Status</th>
+                            <th>Name</th>
+                            <th class="text-center" colspan="2">Download Links</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+
+
+                <h3 id="ios-setup-notes">IOS Setup Notes</h3>
+                <ul>
+                    <li><a href="#required-files-ios">Step 1: Required Files</a></li>
+                    <li><a href="#edit-files-ios">Step 2: Edit Files</a></li>
+                    <li><a href="#skadnetwork">Step 3: SKAdNetwork </a></li>
+                    <li><a href="#ios14">Step 4: iOS14 </a> </li>
+                </ul>
+                <br/>
+                <h4 id="required-files-ios">Required Files</h3>
+                    <p>With your selections you are going to work with following files;</p>
+                    <ul id="list-of-files">
+                        <li><code>Podfile</code></li>
+                        <li><code>Info.plist</code></li>
+                    </ul>
+                    <br/>
+                    <ul id="list-of-files">
+                        <li> <p><a href="https://cocoapods.org" target="_blank">CocoaPods</a> is a dependency manager for Swift and
+                            Objective-C Cocoa projects which automates and simplifies the process of using 3rd-party libraries
+                            like AMR in your projects. See <a href="https://guides.cocoapods.org/using/getting-started.html"
+                                                              target="_blank">getting started guide</a> for more information on
+                            installing cocoapods.</p></li>
+                    </ul>
+               
+                    <br/>
+
+                <h4 id="edit-files-ios">Edit Files</h4>
+                
+                <p>
+                    At least one mediation adapter is required for AMRSDK to show banners. You can add all adapters
+                    (recommended for maximized revenue) or start with a subset of adapters. Consult your AMR agent for
+                    further details.
+                </p>
+
+                <p>Please select the ad networks you want to install from the list above. 
+
+                    <code>Podfile</code> will be updated while you are choosing networks. </p>
+
+                <div class="row" id="adnetwork-button-list">
+                </div>
+
+                <p>To integrate AMR SDK and mediation adapters into your React Native project using CocoaPods, specify it in
+                    your <code>Podfile</code></p>
+
+                <pre><code id="file-pod">
+                    PLEASE SELECT ONE OR MORE NETWORKS TO CREATE YOUR PODPSPEC DEPENDENCY LIST.
+                </code></pre>
+                <br/>
+                <p> Add following lines to your <code>plist</code> file.</p>
+
+                <pre><code class="language-markup">&lt;key&gt;NSAppTransportSecurity&lt;/key&gt;
+&lt;dict&gt;
+    &lt;key&gt;NSExceptionDomains&lt;/key&gt;
+    &lt;dict&gt;
+        &lt;key&gt;admost.com&lt;/key&gt;
+        &lt;dict&gt;
+            &lt;key&gt;NSExceptionAllowsInsecureHTTPLoads&lt;/key&gt;
+            &lt;true/&gt;
+            &lt;key&gt;NSIncludesSubdomains&lt;/key&gt;
+            &lt;true/&gt;
+        &lt;/dict&gt;
+    &lt;/dict&gt;
+&lt;/dict&gt;</code></pre>               
+
+                <pre><code class="language-markup">&lt;key&gt;NSCalendarsUsageDescription&lt;/key&gt;
+&lt;string&gt;Some ad content may access calendar&lt;/string&gt;</code></pre>
+
+                <div class="callout callout-danger" role="alert">
+                    <h4></h4>
+
+                    <p><span class="label label-danger">Important</span> If you are using AdMob you must add your AdMob <code>App ID</code> to your <code>plist</code> file with <code>GADApplicationIdentifier</code> key as shown below. <br/>(Replace <code>ca-app-pub-XXXXXXXXXXXXXXXX~XXXXXXXXXX</code> with your own <code>App ID</code>)</p>
+						<pre>
+<code class="language-markup">
+&lt;key&gt;GADApplicationIdentifier&lt;/key&gt;
+&lt;string&gt;ca-app-pub-XXXXXXXXXXXXXXXX~XXXXXXXXXX&lt;/string&gt;
+</code></pre>
+
+                    <p>Your <code>App ID</code> can be found on AdMob dashboard -&gt; Apps -&gt; App settings -&gt; App info.</p>
+                    <p><img class="img-responsive" src="assets/img/admob_appid.png" alt="admob_appid.png"></p>
+                </div>
+
+                <div class="callout callout-danger" role="alert">
+                   <h4></h4>
+                   <p><span class="label label-danger">Important</span> If you are using AppLovin you must add <code>AppLovin SDK Key</code> to your <code>plist</code> file with <code>AppLovinSdkKey</code> key as shown below. <br/>(Replace <code>XXXXXXXXXXXXXXX</code> with your own <code>AppLovin SDK Key</code>)
+	</p>
+<pre><code class="language-markup">
+&lt;key&gt;AppLovinSdkKey&lt;/key&gt;
+&lt;string&gt;XXXXXXXXXXXXXXX&lt;/string&gt;
+</code></pre>
+                    <p>Your <code>AppLovin SDK Key</code> can be found on AppLovin Dashboard -&gt; Account -&gt; Keys.</p>
+ <p><img class="img-responsive" src="assets/img/applovin_sdkkey.png" alt="applovin_sdkkey.png"></p>
+                </div>
+
+                <div class="callout callout-danger" role="alert">
+                        <h4></h4>
+                        <p><span class="label label-danger">Important</span> If you are using Appsamurai or YouAppi you must set <code>Always Embed Swift Libraries</code> value YES.</p>
+                </div>
+
+                <div class="callout callout-danger" role="alert">
+                        <h4></h4>
+                        <p><span class="label label-danger">Important</span> If you are using Pollfish you must update and add Pollfish Policy to your privacy policy file.	</p>
+                        <p><a href="https://www.pollfish.com/docs/ios" target="_blank">Pollfish Privacy Policy</a></p>
+                </div>
+
+                <div class="callout callout-warning" role="alert">
+                        <h4></h4>
+                        <p><span class="label label-warning">Optional</span> If you are using AdColony you need to add following code to your <code>plist</code> file.</p>
+                        <pre><code class="language-markup">
+&lt;key&gt;LSApplicationQueriesSchemes&lt;/key&gt;
+&lt;array&gt;
+    &lt;string&gt;fb&lt;/string&gt;
+    &lt;string&gt;instagram&lt;/string&gt;
+    &lt;string&gt;tumblr&lt;/string&gt;
+    &lt;string&gt;twitter&lt;/string&gt;
+&lt;/array&gt;
+                        </code></pre>
+                </div>
+<br/>
+                <h4 id="skadnetwork">SKAdNetwork</h4>
+                <p>With the iOS 14, you need to add <code>SKAdNetwork</code> ids to your <code>Info.plist</code> file to support conversion tracking.</p>
+                <p>Add following code to your <code>Info.plist</code> file:</p>
+
+                <pre style="height: 250px;"><code id="file-ios-14">PLEASE SELECT ONE OR MORE NETWORKS TO CREATE YOUR SKADNETWORK LIST.</code></pre>
+
+                <br/>
+
+                
+                <h5 id="ios14"> iOS 14</h5>
+                    <p>Starting with iOS 14, apps will be required to ask users for permission to access IDFA. In order to ask for this permission and display the App Tracking Transparency authorization request for accessing the IDFA, you will need to add <code>NSUserTrackingUsageDescription</code> key to <code>Info.plist</code> file.</p>
+                    <pre>
+<code class="language-markup">
+&lt;key&gt;NSUserTrackingUsageDescription&lt;/key&gt;
+&lt;string&gt;Your awesome message to encourage user to give permission to access IDFA&lt;/string&gt;
+</code>
+                    </pre>
+					
+                    <p>To present the authorization request, call <code>AdmostATTrackingManager.requestTrackingAuthorization():</code></p>
+
+                    <pre><code class="language-markup">
+if #available(iOS 14, *) {
+    ATTrackingManager.requestTrackingAuthorization(completionHandler: { status in
+    // Tracking authorization completed.
+    })
+}
+                    </code></pre>
+                    
+					
+                    <p>User is prompted with following popup after <code>requestTrackingAuthorization</code> call.
+						
+									 <p><center><img class="img-responsive" src="assets/img/att-iOS.PNG" alt="att-iOS.png"></center></p>
+					
+				                    <p>Please see <code><a href="https://developer.apple.com/documentation/apptrackingtransparency/attrackingmanager/authorizationstatus" target="_blank">ATTrackingManager.AuthorizationStatus</a></code> for possible return values.
+									</p>
+									<!-- </section> <section> -->
+                <h3 id="android-setup-notes">Android Setup Notes</h3>
+                <h4 id="required-files-android">Required Files</h3>
+                <p>With your selections you are going to work with following files;</p>
+                <ul id="list-of-files">
+                    <li><code>build.gradle</code></li>
+                    <li><code>settings.gradle</code></li>
+                    <li><code>app/build.gradle</code></li>
+                    <li><code>gradle.properties</code></li>
+                    <li><code>AndroidManifest.xml</code></li>
+                </ul>
+                <p>You can render your React Native component into a Fragment instead of a full screen React Native Activity. The component may be termed a "screen" or "fragment" and it will function in the same manner as an Android fragment, likely containing child components. These components can be placed in a /fragments folder and the child components used to compose the fragment can be placed in a /components folder.
+
+                    You will need to implement the ReactApplication interface in your main Application Java/Kotlin class. If you have created a new project from Android Studio with a default activity, you will need to create a new class (e.g. MyReactApplication.java or MyReactApplication.kt). If it is an existing class you can find this main class in your AndroidManifest.xml file. Under the <application /> tag you should see a property android:name e.g. android:name=".MyReactApplication". This value is the class you want to implement and provide the required methods to.
+                    
+                    </p>
+                <h4 id="edit-files-android">Edit Files</h3>
+                <p>Add an entry for the local React Native and JSC maven directories to the top-level <code>build.gradle</code>. Be sure to add it to the “allprojects” block, above other maven repositories:</p>
+                <pre><code id="code-projectgradle"></code></pre> 
+                
+           
+                
+               
+                <div class="row" id="file-projectgradlejava">
+                    <div class="col-md-11"><p>Add the React Native and JSC dependency to your app's<code>build.gradle</code>file </div>
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-md-12" id="file-appgradlejava"> <pre><code class="language-markup" id="code-appgradlejava"> 
+                        dependencies {
+        implementation "com.android.support:appcompat-v7:27.1.1"
+        ...
+        implementation "com.facebook.react:react-native:+" // From node_modules
+        implementation "org.webkit:android-jsc:+"
+}</code></pre> </div></div>
+    <p> Add the following lines inside in <code>build.gradle</code>  file</p> 
+                     <pre><code id="code-dependencies"></code></pre> 
+
+                    <div class="row" id="file-appgradle">
+                    </div>
+					<div class="row" id="file-gradleproperties">
+                    </div>
+                    <div class="row" id="file-androidmanifest">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-11">
+                            <p>It is highly recommended to enable AndroidX in your project. Editing <code>gradle.properties</code> file and adding the lines below(if they are not present) is required for most ad-network sdks.</b> </p>
+                        </div>
+                        
+                        <div class="col-md-12" id="file-gradleproperties">
+<pre>
+<code id="code-gradleproperties">
+android.useAndroidX=true
+android.enableJetifier=true
+</code>
+</pre>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-11">
+                            <p>Enable native modules autolinking
+                                To use the power of autolinking, we have to apply it a few places. First add the following entry to <code>settings.gradle:</code></p>
+                                <pre>apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)</pre>
+                                <p>Next add the following entry at the very bottom of the <code>app/build.gradle:</code></p>
+                                <pre>apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)</pre>
+                            <p> Starting with Android 9.0 (API level 28), cleartext support is disabled by default. For
+                                applications <b>targetSdkVersion higher than 27</b> must use the following manifest
+                                config for AdMost <b>cleartext support.</b> </p>
+                        </div>
+                        
+                        <div class="col-md-12" id="file-androidmanifest">
+                            <pre><code class="language-markup" id="code-androidmanifest2">
+&lt;manifest ...&gt;
+    &lt;uses-permission android:name="android.permission.INTERNET" /&gt;
+    &lt;application
+        ...
+        android:networkSecurityConfig="@xml/admost_network_security_config"
+        ...&gt;
+        ...
+    &lt;/application&gt;
+&lt;/manifest&gt;
+				</code></pre>
+                        </div>
+                    </div>
+
+               
+
+                    <div class="callout callout-danger" role="alert">
+                        <h4></h4>
+    
+                        <p><span class="label label-danger">Important</span> If you are using Admob SDK (com.google.android.gms:play-services-ads) with version
+                            <b>17.0.0 and higher</b>, you must add your <code>AdMob App ID</code> to your Android Manifest
+                            file. </p>
+                        <pre><code class="language-markup" id="code-androidmanifest2">
+&lt;manifest&gt;
+    &lt;application&gt;
+        &lt;!-- Sample AdMob App ID: ca-app-pub-0000000000000000~0000000000 --&gt;
+        &lt;meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="[ADMOB_APP_ID]"/&gt;
+    &lt;/application&gt;
+&lt;/manifest&gt;
+                        </code></pre>
+    
+                        <p>Your <code>App ID</code> can be found on AdMob dashboard -&gt; Apps -&gt; App settings -&gt; App info.</p>
+                        <p><img class="img-responsive" src="assets/img/admob_appid.png" alt="admob_appid.png"></p>
+                    </div>
+                    
+                    <div class="callout callout-danger" role="alert">
+                        <h4></h4>
+                        <p><span class="label label-danger">Important</span> If you are using AppLovin you must add <code>AppLovin SDK Key</code> to your <code>Android Manifest</code> file as shown below. <br/>
+         </p>
+     <pre><code class="language-markup">&lt;manifest&gt;
+    &lt;application&gt;
+        &lt;meta-data
+            android:name="applovin.sdk.key"
+            android:value="YOUR_SDK_KEY_FROM_APPLOVIN"/&gt;
+    &lt;/application&gt;
+&lt;/manifest&gt;
+     
+     </code></pre>
+                         <p>Your <code>AppLovin SDK Key</code> can be found on AppLovin Dashboard -&gt; Account -&gt; Keys.</p>
+      <p><img class="img-responsive" src="assets/img/applovin_sdkkey.png" alt="applovin_sdkkey.png"></p>
+                     </div>
+
+                    <div  id="nend_warning" style="display: none;">
+                        <div class="callout callout-danger" role="alert">
+                                <h4><span class="label label-danger">Important</span> Nend Ad-Network Usage Warning </h4>
+                                <p><b>Skip this subsection if you don't use Nend ad-network.</b></p>
+                                <p>If you use Nend network and enable shrinkResources in your app, in addition to
+                                    minifyEnabled (in build gradle file: android > buildTypes > <b>shrinkResources
+                                        true</b>),
+                                    you should have a file named <b>keep.xml</b> under res > raw folder with the following
+                                    content:<br>
+                                    <pre> <code class="language-markup">
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+    &lt;resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@drawable/*_thumb,@drawable/*nend*"
+    tools:shrinkMode="strict" /&gt;
+                                    </code></pre>
+                                </p>
+                        </div>
+                    </div>
+
+                    <div id="adgem_warning" style="display: none;">
+                        <div class="callout callout-danger" role="alert">
+                                    <h4><span class="label label-danger">Important</span> AdGem Ad-Network Usage Warning </h4>
+                                    <p><b>Skip this subsection if you don't use AdGem ad-network.</b></p>
+                                    <pre><code class="language-markup">
+// Step 1: You must use Java 8 if you want to use AdGem ad-network. 
+// Add the lines inside of app's build.gradle file > 'android' tag.
+compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+}
+
+// Step 2: Create a new XML resource file called adgem_config.xml within the res/xml directory.
+// If the xml directory does not exist, please create it.
+&lt;adgem-configuration applicationId="ADGEM_APP_ID" 
+standardVideoAdsEnabled="false" 
+rewardedVideoAdsEnabled="false" 
+offerWallEnabled="true" /&gt; 
+
+// Step 3: Add following lines to AndroidManifest.xml file.
+&lt;meta-data android:name="com.adgem.Config" 
+android:resource="@xml/adgem_config"/&gt; 
+                                        </code></pre>
+                                
+                        </div>
+                    </div>
+                    <div id="kidoz_warning" style="display: none;">
+                        <div class="callout callout-danger" role="alert">
+                                    <h4><span class="label label-danger">Important</span> Kidoz Ad-Network Usage Warning </h4>
+                                    <p><b>Skip this subsection if you don't use Kidoz ad-network.</b></p>
+                                    Add following lines to AndroidManifest.xml file under application tag.
+    
+                                    <pre><code class="language-markup">
+&lt;receiver android:name="com.kidoz.sdk.api.receivers.SdkReceiver" android:enabled="true" &gt;
+    &lt;intent-filter&gt;
+        &lt;action android:name="android.intent.action.PACKAGE_ADDED"/&gt;
+            &lt;data android:scheme="package"/&gt;
+    &lt;/intent-filter&gt;
+&lt;/receiver>&gt;
+                                    </code></pre>
+        
+                                    </p>
+                        </div>
+                    </div>
+
+                 <h3 id="proguard">Proguard</h3>  
+                 <p>If you are using proguard. Copy & paste following code snippet in to your <code>/app/src/proguard-rules.pro</code> file</p>
+
+                 <pre class="pre-scrollable"><code class="language-typescript" id="code-proguard">
+# ADMOST
+-keepattributes Exceptions, InnerClasses
+-dontwarn admost.sdk.**
+-keep class admost.sdk.** {*;}
+-dontwarn com.amr.unity.**
+-keep class com.amr.unity.** {*;}
+-dontwarn admost.adserver.**
+-keep class com.adjust.sdk.** {*;}
+-dontwarn com.adjust.sdk.**
+-keep class com.appsflyer.** {*;}
+-dontwarn com.appsflyer.**
+-keep class admost.adserver.** { *; }
+-dontwarn com.google.android.exoplayer2.**
+-keep class com.google.android.exoplayer2.**{ *;}
+-keep class android.support.v4.app.DialogFragment { *; }
+-keep class android.support.v4.util.LruCache { *; }
+
+
+# VOLLEY
+-keep class com.android.volley.** { *; }
+-keep interface com.android.volley.** { *; }
+-keep class org.apache.commons.logging.**
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+# ADCOLONY
+-dontwarn com.adcolony.**
+-keep class com.adcolony.** { *; }
+-keepclassmembers class * { @android.webkit.JavascriptInterface &lt;methods&gt;; }
+-keepclassmembers class com.adcolony.sdk.ADCNative** { *; }
+
+# ADGEM
+-keep class com.adgem.** { *; }
+-dontwarn com.adgem.**
+
+# ADMOB / ADX / GOOGLE
+-keep class com.android.vending.billing.**
+-keep public class com.google.android.gms.ads.** { public *; }
+-keep public class com.google.ads.** { public *; }
+-keep class com.google.android.gms.** { *; }
+-dontwarn com.google.android.gms.**
+-keep public class com.google.android.gms.common.internal.safeparcel.SafeParcelable { public static final *** NULL; }
+-keepnames class * implements android.os.Parcelable
+-keepclassmembers class * implements android.os.Parcelable { public static final *** CREATOR; }
+-keep @interface android.support.annotation.Keep
+-keep @android.support.annotation.Keep class *
+-keepclasseswithmembers class * { @android.support.annotation.Keep &lt;fields&gt;; }
+-keepclasseswithmembers class * { @android.support.annotation.Keep &lt;methods&gt;; }
+-keep @interface com.google.android.gms.common.annotation.KeepName
+-keepnames @com.google.android.gms.common.annotation.KeepName class *
+-keepclassmembernames class * { @com.google.android.gms.common.annotation.KeepName *; }
+-keep @interface com.google.android.gms.common.util.DynamiteApi
+-keep public @com.google.android.gms.common.util.DynamiteApi class * { public &lt;fields&gt;; public &lt;methods&gt;; }
+-keep public @com.google.android.gms.common.util.DynamiteApi class * { *; }
+-keep class com.google.android.apps.common.proguard.UsedBy*
+-keep @com.google.android.apps.common.proguard.UsedBy* class *
+-keepclassmembers class * { @com.google.android.apps.common.proguard.UsedBy* *; }
+-dontwarn android.security.NetworkSecurityPolicy
+-dontwarn android.app.Notification
+
+#ADTIMING
+-dontwarn com.aiming.mdt.**.*
+-dontoptimize
+-dontskipnonpubliclibraryclasses
+-keepattributes *Annotation*
+#adt
+-keep class com.aiming.mdt.**{ *; }
+-keepattributes *Annotation*,InnerClasses
+-keepnames class * implements android.os.Parcelable {
+public static final ** CREATOR;
+}
+#R
+-keepclassmembers class **.R$* {
+public static &lt;fields&gt;;
+}
+
+# AMAZON
+-dontwarn com.amazon.**
+-keep class com.amazon.** { *; }
+-dontwarn org.apache.http.**
+-keepattributes *Annotation*
+
+# APPLOVIN
+-dontwarn com.applovin.**
+-keep class com.applovin.** { *; }
+
+# APPNEXT
+-keep class com.appnext.** { *; }
+-dontwarn com.appnext.**
+
+# APPSAMURAI
+-keepclassmembers,allowobfuscation class * {
+    @com.google.gson.annotations.SerializedName &lt;fields&gt;;
+}
+
+# AVOCARROT - GLISPA
+-keep class com.avocarrot.** { *; }
+-dontwarn com.avocarrot.**
+-keep class com.google.android.exoplayer2.SimpleExoPlayer
+-dontwarn com.google.android.exoplayer2.SimpleExoPlayer
+
+# CHARTBOOST
+-dontwarn org.apache.http.**
+-dontwarn com.chartboost.sdk.impl.**
+-keep class com.chartboost.sdk.** { *; }
+-keepattributes *Annotation*
+
+# CRITEO
+-dontwarn com.criteo.**
+-keep class com.criteo.** { *; }
+
+# DISPLAYIO
+-keep class io.display.sdk.** { *; }
+-dontwarn io.display.sdk.**
+-keep class com.brandio.ads.** { *;}
+-dontwarn com.brandio.ads.**
+
+# FACEBOOK
+-dontwarn com.facebook.ads.**
+-dontnote com.facebook.ads.**
+-keep class com.facebook.** { *; }
+-keepattributes Signature
+-keep class com.google.android.exoplayer2.** {*;}
+-dontwarn com.google.android.exoplayer2.**
+
+# FLURRY
+-keep class com.flurry.** { *; }
+-dontwarn com.flurry.**
+-keepattributes *Annotation*,EnclosingMethod,Signature
+-keepclasseswithmembers class * { public &lt;init&gt;(android.content.Context, android.util.AttributeSet, int); }
+-keep class * extends java.util.ListResourceBundle { protected Object[][] getContents(); }
+-keep public class com.google.android.gms.common.internal.safeparcel.SafeParcelable { public static final *** NULL; }
+-keepnames @com.google.android.gms.common.annotation.KeepName class *
+-keepclassmembernames class * { @com.google.android.gms.common.annotation.KeepName *; }
+-keepnames class * implements android.os.Parcelable { public static final ** CREATOR; }
+
+# FREECORP
+-keep class com.fly.** { *; }
+-dontwarn com.fly.**
+
+# FYBER
+-keep class com.fyber.** { *; }
+-dontwarn com.fyber.**
+-keep class com.fyber.mediation.MediationConfigProvider { public static *; }
+-keep class com.fyber.mediation.MediationAdapterStarter { public static *; }
+-keepclassmembers class com.fyber.ads.videos.mediation.** { void setValue(java.lang.String); }
+
+# HUAWEI-ADS
+-keep class com.huawei.openalliance.ad.** { *; }
+-keep class com.huawei.hms.ads.** { *; }
+
+# INMOBI
+-keepattributes SourceFile,LineNumberTable
+-keep class com.inmobi.** {*;}
+-dontwarn com.inmobi.**
+-keep public class com.google.android.gms.**
+-dontwarn com.google.android.gms.**
+-dontwarn com.squareup.picasso.**
+-keep class com.google.android.gms.ads.identifier.AdvertisingIdClient{public *;}
+-keep class com.google.android.gms.ads.identifier.AdvertisingIdClient$Info{public *;}
+-keep class com.squareup.picasso.** {*;}
+-dontwarn com.squareup.picasso.**
+-dontwarn com.squareup.okhttp.**
+-keep class com.moat.** {*;}
+-dontwarn com.moat.**
+-keep class com.integralads.avid.library.* {*;}
+
+
+# INNERACTIVE
+-dontwarn com.fyber.**
+-keep class com.fyber.** {*;}
+-dontwarn com.inneractive.api.ads.**
+-keep class com.inneractive.api.ads.** {*;}
+-keepclassmembers class com.inneractive.api.ads.** {*;}
+-keepclassmembers class com.inneractive.api.ads.sdk.nativead.** {*;}
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep class sun.misc.Unsafe { *; }
+-keep class com.google.gson.stream.** { *; }
+-keep class com.google.gson.examples.android.model.** { *; }
+-keep class com.google.gson.Gson { *; }
+-keep class com.google.gson.GsonBuilder { *; }
+-keep class com.google.gson.FieldNamingStrategy { *; }
+
+# IRONSOURCE
+-dontwarn com.ironsource.**
+-keep class com.ironsource.** { *; }
+-keepclassmembers class * implements android.os.Parcelable { public static final android.os.Parcelable$Creator *; }
+-keep public class com.google.android.gms.ads.** { public *; }
+-keep class com.ironsource.adapters.** { *; }
+-dontwarn com.moat.**
+-keep class com.moat.** { public protected private *; }
+
+# LOOPME
+-dontwarn com.loopme.**
+-keep class com.loopme.** { *; }
+
+# MEDIABRIX
+-keep class com.mediabrix.** { *; }
+-keep class com.moat.** { *; }
+-keep class mdos.** { *; }
+-dontwarn com.mediabrix.**
+-dontwarn com.moat.**
+-dontwarn mdos.**
+
+# MILLENNIAL & NEXAGE
+-keep class com.millennialmedia.** { *; }
+-dontwarn com.millennialmedia.**
+
+# MINTEGRAL
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep class com.mbridge.** {*; }
+-keep interface com.mbridge.** {*; }
+-keep interface androidx.** { *; }
+-keep class androidx.** { *; }
+-keep public class * extends androidx.** { *; }
+-dontwarn com.mbridge.**
+-keep class **.R$* { public static final int mbridge*; }
+
+# MOBFOX
+-dontwarn com.mobfox.**
+-keep class com.mobfox.** { *; }
+-keep class com.mobfox.adapter.** { *; }
+-keep class com.mobfox.sdk.** { *; }
+
+# MOPUB
+-keepclassmembers class com.mopub.** { public *; }
+-dontnote com.mopub.**
+-dontwarn com.mopub.**
+-keep public class com.mopub.**
+-keep class com.mopub.mobileads.** { *; }
+-keep class * extends com.mopub.mobileads.CustomEventBanner {}
+-keep class * extends com.mopub.mobileads.CustomEventInterstitial {}
+-keep class * extends com.mopub.nativeads.CustomEventNative {}
+-keep class * extends com.mopub.nativeads.CustomEventRewardedAd {}
+-keepclassmembers class ** { @com.mopub.common.util.ReflectionTarget *; }
+-keepclassmembers class com.integralads.avid.library.mopub.** { public *; }
+-keep public class com.integralads.avid.library.mopub.**
+-keepclassmembers class com.moat.analytics.mobile.mpub.** { public *; }
+-keep public class com.moat.analytics.mobile.mpub.**
+-keep class com.google.android.gms.common.GooglePlayServicesUtil { *; }
+-keep class com.google.android.gms.ads.identifier.AdvertisingIdClient { *; }
+-keep class com.google.android.gms.ads.identifier.AdvertisingIdClient$Info { *; }
+-keep class * extends java.util.ListResourceBundle { protected Object[][] getContents(); }
+-keep public class com.google.android.gms.common.internal.safeparcel.SafeParcelable { public static final *** NULL; }
+-keepnames @com.google.android.gms.common.annotation.KeepName class *
+-keepclassmembernames class * { @com.google.android.gms.common.annotation.KeepName *; }
+-keepnames class * implements android.os.Parcelable { public static final ** CREATOR; }
+-keep public class android.webkit.JavascriptInterface {}
+
+# MYTARGET
+-keep class com.my.target.** {*;} 
+
+# NEND
+-keep class net.nend.android.** { *; }
+-dontwarn net.nend.android.**
+
+# NATIVEX
+-dontwarn com.nativex.**
+-keep class com.nativex.** { *; }
+
+# OGURY
+-dontwarn com.ogury.**
+-keep class com.ogury.** { *; }
+
+# OUTBID
+-dontwarn outbid.com.outbidsdk.**
+-keep class outbid.com.outbidsdk.** { *; }
+
+# QUMPARA
+-dontwarn com.qumpara.analytics.**
+-keep class com.qumpara.analytics.** { *; }
+-dontwarn com.qumpara.offerwall.sdk.**
+-keep class com.qumpara.offerwall.sdk.** { *; }
+
+#POLLFISH
+-dontwarn com.pollfish.** 
+-keep class com.pollfish.** { *; }
+
+# PUBNATIVE
+-keepattributes Signature
+-keep class net.pubnative.** { *; }
+-dontwarn net.pubnative.**
+-keep class com.squareup.picasso.** { *; }
+-dontwarn com.squareup.picasso.**
+
+# REVMOB
+-dontwarn rm.com.android.sdk.**
+-keep class rm.com.android.sdk.** { public *; }
+
+# RETROFIT
+-dontwarn retrofit2.**
+-keep class retrofit2.** { *; }
+-keepattributes Signature
+-keepattributes Exceptions
+-keepclasseswithmembers class * {
+    @retrofit2.http.* &lt;methods&gt;;
+}
+
+# SMAATO
+-dontwarn com.smaato.**
+-keep class com.smaato.** { public *; }
+-assumenosideeffects class android.util.Log {
+    public static *** d(...);
+    public static *** v(...);
+    public static *** i(...);
+}
+-keep public class com.smaato.soma.internal.connector.OrmmaBridge { public *; }
+-keepattributes *Annotation*
+-dontwarn com.smaato.soma.SomaUnityPlugin*
+-dontwarn com.millennialmedia**
+-dontwarn com.facebook.**
+
+# SMARTAD
+-keep class com.smartadserver.** { *; }
+-dontwarn com.smartadserver.**
+
+
+# STARTAPP
+-keepattributes Exceptions, InnerClasses, Signature, Deprecated, SourceFile, LineNumberTable, *Annotation*, EnclosingMethod
+-dontwarn android.webkit.JavascriptInterface
+-keep class com.startapp.** { *; }
+-dontwarn com.startapp.**
+
+# TAPJOY
+-keep class com.tapjoy.** {*;}
+-keep class com.moat.** {*;}
+-keepattributes JavascriptInterface
+-keepattributes *Annotation*
+-keep class * extends java.util.ListResourceBundle {protected Object[][] getContents();}
+-keep public class com.google.android.gms.common.internal.safeparcel.SafeParcelable {public static final *** NULL;}
+-keepnames @com.google.android.gms.common.annotation.KeepName class *
+-keepclassmembernames class * {@com.google.android.gms.common.annotation.KeepName *;}
+-keepnames class * implements android.os.Parcelable {public static final ** CREATOR;}
+-keep class com.google.android.gms.ads.identifier.** {*;}
+-dontwarn com.tapjoy.**
+
+# TAPPX
+-keepattributes *Annotation*
+-keepclassmembers class com.google.**.R$* { public static &lt;fields&gt;; }
+-keep public class com.google.ads.** {*;}
+-keep public class com.google.android.gms.** {*;}
+-keep public class com.tappx.** { *; }
+-dontwarn com.tappx.**
+
+#TIKTOK
+-keep class com.bytedance.sdk.openadsdk.** { *; }
+-keep public interface com.bytedance.sdk.openadsdk.downloadnew.** {*;}
+-keep class com.pgl.sys.ces.** {*;}
+-keep class com.bytedance.embed_dr.** {*;}
+-keep class com.bytedance.embedapplog.** {*;}
+
+# UNITY
+-dontwarn com.unity3d.**
+-keep class com.unity3d.ads.** { *; }
+
+# Vungle
+-dontwarn com.vungle.**
+-dontnote com.vungle.**
+-keep class com.vungle.** { *; }
+-dontwarn com.vungle.warren.error.VungleError$ErrorCode
+-keep class com.moat.** { *; }
+-dontwarn com.moat.**
+-dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
+-dontwarn okio.**
+-dontwarn retrofit2.Platform$Java8
+-keepattributes Signature
+-keepattributes InnerClasses
+-keepattributes *Annotation*
+-dontwarn sun.misc.**
+-keep class com.google.gson.examples.android.model.** { *; }
+-keep class * implements com.google.gson.TypeAdapterFactory
+-keep class * implements com.google.gson.JsonSerializer
+-keep class * implements com.google.gson.JsonDeserializer
+-keep class com.google.android.gms.internal.** { *; }
+-dontwarn com.google.android.gms.ads.identifier.**
+
+-keepclassmembers enum com.vungle.warren.** { *; }
+-dontwarn kotlin.Unit
+-dontwarn retrofit2.-KotlinExtensions
+-keepclassmembers,allowshrinking,allowobfuscation interface * {
+    @retrofit2.http.* &lt;methods&gt;;
+}
+-dontwarn okhttp3.**
+-dontwarn javax.annotation.**
+-dontwarn org.conscrypt.**
+-keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
+-keepclassmembers class * extends com.vungle.warren.persistence.Memorable {
+    public &lt;init&gt;(byte[]);
+}
+
+#YANDEX
+-dontwarn com.yandex.**
+-keep class com.yandex.** { *; }                        
+
+# YOUAPPI
+-keep class com.google.gson.**{ *;}
+-keep class com.google.android.gms.**{*;}
+-keep class com.youappi.sdk.**{*;}
+-keep interface com.youappi.sdk.**{*;}
+-keep enum com.youappi.sdk.**{*;}
+-keepclassmembers class * {
+    @android.webkit.JavascriptInterface &lt;methods&gt;;
+}
+
+# VERIZON
+-keepclassmembers class com.verizon.ads** {
+public *;
+}
+-keep class com.verizon.ads**
+</code>
+            </pre>     
+                <h2 id="usage">Usage</h2>
+
+                <h3 id="initialization">Initialization</h3>
+                <p>
+                    To initialize Admost Mediation SDK, import <code>import Admost from "@up-inside/react-native-admost";</code> to your file;
+                </p>
+
+                <pre><code class="language-markup">
+    AdMost.initAdMost({
+      appId: appId,
+      userConsent: true,
+      subjectToGDPR: false,
+      subjectToCCPA: false,
+      userChild: false,
+      userId: undefined,
+    });
+                </code></pre>
+
+                
+
+                <p>For testing you can use following Application Id;</p>
+
+                <pre><code class="language-markup">
+IOS Application Id: "15066ddc-9c18-492c-8185-bea7e4c7f88c"
+Android Application Id: "6cc8e89a-b52a-4e9a-bb8c-579f7ec538fe"
+
+                </code></pre>
+
+                <h4 id="initgdpr">GDPR and CCPA</h4>
+                <p> Once you have collected the user’s consent, you can pass it onto the SDK using the init configuration parameters shown above.  </p>
+                 <p><code>userConsent</code> has a boolean parameter. If you have the user’s consent, set it YES. If you do not have the user's consent, set it NO.  </p>
+                 <p><code>subjectToGDPR</code> has a boolean parameter. If you know the user is subject to GDPR, set it YES. If you know the user is not subject to GDPR, set it NO. </p>
+                 <p><code>subjectToCCPA</code> has a boolean parameter. If you know the user is subject to CCPA, set it YES. If you know the user is not subject to CCPA, set it NO. </p>
+                <p>If you don’t pass the user’s consent or subjectToGDPR to the SDK, the rules described in  <a target="_blank" href="https://admost.github.io/privacy.html#gdprrules">GDPR</a>  have been applied.  </p>
+                <p>If you don’t pass the user’s consent or subjectToCCPA to the SDK, the rules described in  <a target="_blank" href="https://admost.github.io/privacy.html#ccparules">CCPA</a>  have been applied.  </p>
+
+
+                <h3 id="banner-ads">Banner Ads</h3>
+
+                <p>
+                    <span class="label label-danger">Important</span>
+                    Default banner size changed from Fullscreen width to 320x50, 728x90 and 300x250.<br/>
+                    If you are using 320x90 banner, please contact with your account manager.<br/>
+                </p>
+
+                <p>There are 3 types of banner size; 320x50, 728x90 and 300x250 banner.<br/><br/></p>
+<pre><span class="pl-k">import</span> <span class="pl-v">React</span> <span class="pl-k">from</span> <span class="pl-s">"react"</span><span class="pl-kos">;</span>
+<span class="pl-k">import</span> <span class="pl-kos">{</span> <span class="pl-v">Button</span><span class="pl-kos">,</span> <span class="pl-v">View</span> <span class="pl-kos">}</span> <span class="pl-k">from</span> <span class="pl-s">"react-native"</span><span class="pl-kos">;</span>
+<span class="pl-k">import</span> <span class="pl-v">AdMost</span><span class="pl-kos">,</span> <span class="pl-kos">{</span> <span class="pl-v">AdMostAdView</span><span class="pl-kos">,</span> <span class="pl-v">BannerAdEvents</span><span class="pl-kos">,</span> <span class="pl-v">AdMostEventEmitter</span> <span class="pl-kos">}</span> <span class="pl-k">from</span> <span class="pl-s">"@up-inside/react-native-admost"</span><span class="pl-kos">;</span>
+
+<span class="pl-k">export</span> <span class="pl-k">default</span> <span class="pl-k">class</span> <span class="pl-v">App</span> <span class="pl-k">extends</span> <span class="pl-v">React</span><span class="pl-kos">.</span><span class="pl-c1">Component</span> <span class="pl-kos">{</span>
+  <span class="pl-en">componentDidMount</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-k">const</span> <span class="pl-s1">appId</span> <span class="pl-c1">=</span> <span class="pl-s">"&lt;your-app-id&gt;"</span><span class="pl-kos">;</span>
+
+    <span class="pl-v">AdMost</span><span class="pl-kos">.</span><span class="pl-en">initAdMost</span><span class="pl-kos">(</span><span class="pl-kos">{</span>
+      <span class="pl-c1">appId</span>: <span class="pl-s1">appId</span><span class="pl-kos">,</span>
+      <span class="pl-c1">userConsent</span>: <span class="pl-c1">true</span><span class="pl-kos">,</span>
+      <span class="pl-c1">subjectToGDPR</span>: <span class="pl-c1">false</span><span class="pl-kos">,</span>
+      <span class="pl-c1">subjectToCCPA</span>: <span class="pl-c1">false</span><span class="pl-kos">,</span>
+      <span class="pl-c1">userChild</span>: <span class="pl-c1">false</span><span class="pl-kos">,</span>
+      <span class="pl-c1">userId</span>: <span class="pl-c1">undefined</span><span class="pl-kos">,</span>
+    <span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-en">setListeners</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-c">// this.admostAdViewRef.loadAd();</span>
+  <span class="pl-kos">}</span>
+
+  <span class="pl-en">componentWillUnmount</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-en">clearListeners</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+  <span class="pl-kos">}</span>
+
+  <span class="pl-en">setListeners</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">adMostOnReadyEvent</span> <span class="pl-c1">=</span> <span class="pl-v">AdMostEventEmitter</span><span class="pl-kos">.</span><span class="pl-en">addListener</span><span class="pl-kos">(</span><span class="pl-v">BannerAdEvents</span><span class="pl-kos">.</span><span class="pl-c1">ON_READY</span><span class="pl-kos">,</span> <span class="pl-kos">(</span><span class="pl-s1">e</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-kos">{</span>
+      <span class="pl-smi">console</span><span class="pl-kos">.</span><span class="pl-en">log</span><span class="pl-kos">(</span><span class="pl-s">"ON_READY"</span><span class="pl-kos">,</span> <span class="pl-s1">e</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">adMostOnFailEvent</span> <span class="pl-c1">=</span> <span class="pl-v">AdMostEventEmitter</span><span class="pl-kos">.</span><span class="pl-en">addListener</span><span class="pl-kos">(</span><span class="pl-v">BannerAdEvents</span><span class="pl-kos">.</span><span class="pl-c1">ON_FAIL</span><span class="pl-kos">,</span> <span class="pl-kos">(</span><span class="pl-s1">e</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-kos">{</span>
+      <span class="pl-smi">console</span><span class="pl-kos">.</span><span class="pl-en">log</span><span class="pl-kos">(</span><span class="pl-s">"ON_FAIL"</span><span class="pl-kos">,</span> <span class="pl-s1">e</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">adMostOnClickEvent</span> <span class="pl-c1">=</span> <span class="pl-v">AdMostEventEmitter</span><span class="pl-kos">.</span><span class="pl-en">addListener</span><span class="pl-kos">(</span><span class="pl-v">BannerAdEvents</span><span class="pl-kos">.</span><span class="pl-c1">ON_CLICK</span><span class="pl-kos">,</span> <span class="pl-kos">(</span><span class="pl-s1">e</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-kos">{</span>
+      <span class="pl-smi">console</span><span class="pl-kos">.</span><span class="pl-en">log</span><span class="pl-kos">(</span><span class="pl-s">"ON_CLICK"</span><span class="pl-kos">,</span> <span class="pl-s1">e</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+  <span class="pl-kos">}</span>
+
+  <span class="pl-en">clearListeners</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">adMostOnReadyEvent</span><span class="pl-kos">.</span><span class="pl-en">remove</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">adMostOnFailEvent</span><span class="pl-kos">.</span><span class="pl-en">remove</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">adMostOnClickEvent</span><span class="pl-kos">.</span><span class="pl-en">remove</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+  <span class="pl-kos">}</span>
+
+  <span class="pl-en">render</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-k">return</span> <span class="pl-kos">(</span>
+      <span class="pl-c1">&lt;</span><span class="pl-ent">View</span> <span class="pl-c1">style</span><span class="pl-c1">=</span><span class="pl-kos">{</span><span class="pl-kos">{</span> <span class="pl-c1">flex</span>: <span class="pl-c1">1</span> <span class="pl-kos">}</span><span class="pl-kos">}</span><span class="pl-c1">&gt;</span>
+        <span class="pl-c1">&lt;</span><span class="pl-ent">AdMostAdView</span>
+          <span class="pl-c1">ref</span><span class="pl-c1">=</span><span class="pl-kos">{</span><span class="pl-kos">(</span><span class="pl-s1">ref</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-kos">(</span><span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">admostAdViewRef</span> <span class="pl-c1">=</span> <span class="pl-s1">ref</span><span class="pl-kos">)</span><span class="pl-kos">}</span>
+          <span class="pl-c1">style</span><span class="pl-c1">=</span><span class="pl-kos">{</span><span class="pl-kos">{</span> <span class="pl-c1">width</span>: <span class="pl-s">"100%"</span><span class="pl-kos">,</span> <span class="pl-c1">height</span>: <span class="pl-c1">250</span> <span class="pl-kos">}</span><span class="pl-kos">}</span>
+          <span class="pl-c1">zoneId</span><span class="pl-c1">=</span><span class="pl-kos">{</span><span class="pl-s1">adMostZoneId</span><span class="pl-kos">}</span>
+        <span class="pl-c1">/</span><span class="pl-c1">&gt;</span>
+      <span class="pl-c1">&lt;</span><span class="pl-c1">/</span><span class="pl-ent">View</span><span class="pl-c1">&gt;</span>
+    <span class="pl-kos">)</span><span class="pl-kos">;</span>
+  <span class="pl-kos">}</span>
+<span class="pl-kos">}</span></pre>
+
+        
+
+
+
+                <h3 id="interstitial-ads">Interstitial Ads</h3>
+<pre><span class="pl-k">import</span> <span class="pl-v">React</span> <span class="pl-k">from</span> <span class="pl-s">"react"</span><span class="pl-kos">;</span>
+<span class="pl-k">import</span> <span class="pl-kos">{</span> <span class="pl-v">Button</span><span class="pl-kos">,</span> <span class="pl-v">View</span> <span class="pl-kos">}</span> <span class="pl-k">from</span> <span class="pl-s">"react-native"</span><span class="pl-kos">;</span>
+<span class="pl-k">import</span> <span class="pl-v">AdMost</span><span class="pl-kos">,</span> <span class="pl-kos">{</span> <span class="pl-v">AdMostEventEmitter</span><span class="pl-kos">,</span> <span class="pl-v">AdMostInterstitial</span><span class="pl-kos">,</span> <span class="pl-v">InterstitialAdEvents</span> <span class="pl-kos">}</span> <span class="pl-k">from</span> <span class="pl-s">"@up-inside/react-native-admost"</span><span class="pl-kos">;</span>
+
+<span class="pl-k">export</span> <span class="pl-k">default</span> <span class="pl-k">class</span> <span class="pl-v">SplashScreen</span> <span class="pl-k">extends</span> <span class="pl-v">React</span><span class="pl-kos">.</span><span class="pl-c1">Component</span> <span class="pl-kos">{</span>
+  <span class="pl-en">componentDidMount</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-k">const</span> <span class="pl-s1">appId</span> <span class="pl-c1">=</span> <span class="pl-s">"&lt;your-app-id&gt;"</span><span class="pl-kos">;</span>
+
+    <span class="pl-v">AdMost</span><span class="pl-kos">.</span><span class="pl-en">initAdMost</span><span class="pl-kos">(</span><span class="pl-kos">{</span>
+      <span class="pl-c1">appId</span>: <span class="pl-s1">appId</span><span class="pl-kos">,</span>
+      <span class="pl-c1">userConsent</span>: <span class="pl-c1">true</span><span class="pl-kos">,</span>
+      <span class="pl-c1">subjectToGDPR</span>: <span class="pl-c1">false</span><span class="pl-kos">,</span>
+      <span class="pl-c1">subjectToCCPA</span>: <span class="pl-c1">false</span><span class="pl-kos">,</span>
+      <span class="pl-c1">userChild</span>: <span class="pl-c1">false</span><span class="pl-kos">,</span>
+      <span class="pl-c1">userId</span>: <span class="pl-c1">undefined</span><span class="pl-kos">,</span>
+    <span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-en">setListeners</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+  <span class="pl-kos">}</span>
+
+  <span class="pl-en">componentWillUnmount</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-en">clearListeners</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+  <span class="pl-kos">}</span>
+
+  <span class="pl-en">setListeners</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">adMostOnReadyEvent</span> <span class="pl-c1">=</span> <span class="pl-v">AdMostEventEmitter</span><span class="pl-kos">.</span><span class="pl-en">addListener</span><span class="pl-kos">(</span><span class="pl-v">InterstitialAdEvents</span><span class="pl-kos">.</span><span class="pl-c1">ON_READY</span><span class="pl-kos">,</span> <span class="pl-kos">(</span><span class="pl-s1">e</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-kos">{</span>
+      <span class="pl-smi">console</span><span class="pl-kos">.</span><span class="pl-en">log</span><span class="pl-kos">(</span><span class="pl-s">"ON_READY"</span><span class="pl-kos">,</span> <span class="pl-s1">e</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+      <span class="pl-v">AdMostInterstitial</span><span class="pl-kos">.</span><span class="pl-en">showAd</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">adMostOnFailEvent</span> <span class="pl-c1">=</span> <span class="pl-v">AdMostEventEmitter</span><span class="pl-kos">.</span><span class="pl-en">addListener</span><span class="pl-kos">(</span><span class="pl-v">InterstitialAdEvents</span><span class="pl-kos">.</span><span class="pl-c1">ON_FAIL</span><span class="pl-kos">,</span> <span class="pl-kos">(</span><span class="pl-s1">e</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-kos">{</span>
+      <span class="pl-smi">console</span><span class="pl-kos">.</span><span class="pl-en">log</span><span class="pl-kos">(</span><span class="pl-s">"ON_FAIL"</span><span class="pl-kos">,</span> <span class="pl-s1">e</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">adMostOnShownEvent</span> <span class="pl-c1">=</span> <span class="pl-v">AdMostEventEmitter</span><span class="pl-kos">.</span><span class="pl-en">addListener</span><span class="pl-kos">(</span><span class="pl-v">InterstitialAdEvents</span><span class="pl-kos">.</span><span class="pl-c1">ON_SHOWN</span><span class="pl-kos">,</span> <span class="pl-kos">(</span><span class="pl-s1">e</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-kos">{</span>
+      <span class="pl-smi">console</span><span class="pl-kos">.</span><span class="pl-en">log</span><span class="pl-kos">(</span><span class="pl-s">"ON_SHOWN"</span><span class="pl-kos">,</span> <span class="pl-s1">e</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">adMostOnClickedEvent</span> <span class="pl-c1">=</span> <span class="pl-v">AdMostEventEmitter</span><span class="pl-kos">.</span><span class="pl-en">addListener</span><span class="pl-kos">(</span><span class="pl-v">InterstitialAdEvents</span><span class="pl-kos">.</span><span class="pl-c1">ON_CLICKED</span><span class="pl-kos">,</span> <span class="pl-kos">(</span><span class="pl-s1">e</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-kos">{</span>
+      <span class="pl-smi">console</span><span class="pl-kos">.</span><span class="pl-en">log</span><span class="pl-kos">(</span><span class="pl-s">"ON_CLICKED"</span><span class="pl-kos">,</span> <span class="pl-s1">e</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">adMostOnDismissEvent</span> <span class="pl-c1">=</span> <span class="pl-v">AdMostEventEmitter</span><span class="pl-kos">.</span><span class="pl-en">addListener</span><span class="pl-kos">(</span><span class="pl-v">InterstitialAdEvents</span><span class="pl-kos">.</span><span class="pl-c1">ON_DISMISS</span><span class="pl-kos">,</span> <span class="pl-kos">(</span><span class="pl-s1">e</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-kos">{</span>
+      <span class="pl-smi">console</span><span class="pl-kos">.</span><span class="pl-en">log</span><span class="pl-kos">(</span><span class="pl-s">"ON_DISMISS"</span><span class="pl-kos">,</span> <span class="pl-s1">e</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">adMostOnStatusChangedEvent</span> <span class="pl-c1">=</span> <span class="pl-v">AdMostEventEmitter</span><span class="pl-kos">.</span><span class="pl-en">addListener</span><span class="pl-kos">(</span><span class="pl-v">InterstitialAdEvents</span><span class="pl-kos">.</span><span class="pl-c1">ON_STATUS_CHANGED</span><span class="pl-kos">,</span> <span class="pl-kos">(</span><span class="pl-s1">e</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-kos">{</span>
+      <span class="pl-smi">console</span><span class="pl-kos">.</span><span class="pl-en">log</span><span class="pl-kos">(</span><span class="pl-s">"ON_STATUS_CHANGED"</span><span class="pl-kos">,</span> <span class="pl-s1">e</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+  <span class="pl-kos">}</span>
+
+  <span class="pl-en">clearListeners</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">adMostOnReadyEvent</span><span class="pl-kos">.</span><span class="pl-en">remove</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">adMostOnFailEvent</span><span class="pl-kos">.</span><span class="pl-en">remove</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">adMostOnShownEvent</span><span class="pl-kos">.</span><span class="pl-en">remove</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">adMostOnClickedEvent</span><span class="pl-kos">.</span><span class="pl-en">remove</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">adMostOnDismissEvent</span><span class="pl-kos">.</span><span class="pl-en">remove</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">adMostOnStatusChangedEvent</span><span class="pl-kos">.</span><span class="pl-en">remove</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+  <span class="pl-kos">}</span>
+
+  <span class="pl-en">render</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-k">return</span> <span class="pl-kos">(</span>
+      <span class="pl-c1">&lt;</span><span class="pl-ent">View</span> <span class="pl-c1">style</span><span class="pl-c1">=</span><span class="pl-kos">{</span><span class="pl-kos">{</span> <span class="pl-c1">flex</span>:<span class="pl-c1">1</span> <span class="pl-kos">}</span><span class="pl-kos">}</span><span class="pl-c1">&gt;</span>
+        <span class="pl-c1">&lt;</span><span class="pl-ent">Button</span>
+          <span class="pl-c1">onPress</span><span class="pl-c1">=</span><span class="pl-kos">{</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-v">AdMostInterstitial</span><span class="pl-kos">.</span><span class="pl-en">loadAd</span><span class="pl-kos">(</span><span class="pl-s">"zone-id"</span><span class="pl-kos">)</span><span class="pl-kos">}</span>
+          <span class="pl-c1">title</span><span class="pl-c1">=</span><span class="pl-s">"Load Ad"</span>
+          <span class="pl-c1">color</span><span class="pl-c1">=</span><span class="pl-s">"red"</span>
+        <span class="pl-c1">/</span><span class="pl-c1">&gt;</span>
+      <span class="pl-c1">&lt;</span><span class="pl-c1">/</span><span class="pl-ent">View</span><span class="pl-c1">&gt;</span>
+    <span class="pl-kos">)</span><span class="pl-kos">;</span>
+  <span class="pl-kos">}</span>
+<span class="pl-kos">}</span></pre>
+
+
+
+
+
+
+
+
+
+                <h3 id="rewarded-video-ads">Rewarded Video Ads</h3>
+                <pre><span class="pl-k">import</span> <span class="pl-v">React</span> <span class="pl-k">from</span> <span class="pl-s">"react"</span><span class="pl-kos">;</span>
+<span class="pl-k">import</span> <span class="pl-kos">{</span> <span class="pl-v">Button</span><span class="pl-kos">,</span> <span class="pl-v">View</span> <span class="pl-kos">}</span> <span class="pl-k">from</span> <span class="pl-s">"react-native"</span><span class="pl-kos">;</span>
+<span class="pl-k">import</span> <span class="pl-v">AdMost</span><span class="pl-kos">,</span> <span class="pl-kos">{</span> <span class="pl-v">AdMostEventEmitter</span><span class="pl-kos">,</span> <span class="pl-v">AdMostRewarded</span><span class="pl-kos">,</span> <span class="pl-v">RewardedAdEvents</span> <span class="pl-kos">}</span> <span class="pl-k">from</span> <span class="pl-s">"@up-inside/react-native-admost"</span><span class="pl-kos">;</span>
+
+<span class="pl-k">export</span> <span class="pl-k">default</span> <span class="pl-k">class</span> <span class="pl-v">SplashScreen</span> <span class="pl-k">extends</span> <span class="pl-v">React</span><span class="pl-kos">.</span><span class="pl-c1">Component</span> <span class="pl-kos">{</span>
+  <span class="pl-en">componentDidMount</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-k">const</span> <span class="pl-s1">appId</span> <span class="pl-c1">=</span> <span class="pl-s">"&lt;your-app-id&gt;"</span><span class="pl-kos">;</span>
+
+    <span class="pl-v">AdMost</span><span class="pl-kos">.</span><span class="pl-en">initAdMost</span><span class="pl-kos">(</span><span class="pl-kos">{</span>
+      <span class="pl-c1">appId</span>: <span class="pl-s1">appId</span><span class="pl-kos">,</span>
+      <span class="pl-c1">userConsent</span>: <span class="pl-c1">true</span><span class="pl-kos">,</span>
+      <span class="pl-c1">subjectToGDPR</span>: <span class="pl-c1">false</span><span class="pl-kos">,</span>
+      <span class="pl-c1">subjectToCCPA</span>: <span class="pl-c1">false</span><span class="pl-kos">,</span>
+      <span class="pl-c1">userChild</span>: <span class="pl-c1">false</span><span class="pl-kos">,</span>
+      <span class="pl-c1">userId</span>: <span class="pl-c1">undefined</span><span class="pl-kos">,</span>
+    <span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-en">setListeners</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+  <span class="pl-kos">}</span>
+
+  <span class="pl-en">componentWillUnmount</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-en">clearListeners</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+  <span class="pl-kos">}</span>
+
+  <span class="pl-en">setListeners</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">adMostOnReadyEvent</span> <span class="pl-c1">=</span> <span class="pl-v">AdMostEventEmitter</span><span class="pl-kos">.</span><span class="pl-en">addListener</span><span class="pl-kos">(</span><span class="pl-v">RewardedAdEvents</span><span class="pl-kos">.</span><span class="pl-c1">ON_READY</span><span class="pl-kos">,</span> <span class="pl-kos">(</span><span class="pl-s1">e</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-kos">{</span>
+      <span class="pl-smi">console</span><span class="pl-kos">.</span><span class="pl-en">log</span><span class="pl-kos">(</span><span class="pl-s">"ON_READY"</span><span class="pl-kos">,</span> <span class="pl-s1">e</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+      <span class="pl-v">AdMostRewarded</span><span class="pl-kos">.</span><span class="pl-en">showAd</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">adMostOnFailEvent</span> <span class="pl-c1">=</span> <span class="pl-v">AdMostEventEmitter</span><span class="pl-kos">.</span><span class="pl-en">addListener</span><span class="pl-kos">(</span><span class="pl-v">RewardedAdEvents</span><span class="pl-kos">.</span><span class="pl-c1">ON_FAIL</span><span class="pl-kos">,</span> <span class="pl-kos">(</span><span class="pl-s1">e</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-kos">{</span>
+      <span class="pl-smi">console</span><span class="pl-kos">.</span><span class="pl-en">log</span><span class="pl-kos">(</span><span class="pl-s">"ON_FAIL"</span><span class="pl-kos">,</span> <span class="pl-s1">e</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">adMostOnShownEvent</span> <span class="pl-c1">=</span> <span class="pl-v">AdMostEventEmitter</span><span class="pl-kos">.</span><span class="pl-en">addListener</span><span class="pl-kos">(</span><span class="pl-v">RewardedAdEvents</span><span class="pl-kos">.</span><span class="pl-c1">ON_SHOWN</span><span class="pl-kos">,</span> <span class="pl-kos">(</span><span class="pl-s1">e</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-kos">{</span>
+      <span class="pl-smi">console</span><span class="pl-kos">.</span><span class="pl-en">log</span><span class="pl-kos">(</span><span class="pl-s">"ON_SHOWN"</span><span class="pl-kos">,</span> <span class="pl-s1">e</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">adMostOnClickedEvent</span> <span class="pl-c1">=</span> <span class="pl-v">AdMostEventEmitter</span><span class="pl-kos">.</span><span class="pl-en">addListener</span><span class="pl-kos">(</span><span class="pl-v">RewardedAdEvents</span><span class="pl-kos">.</span><span class="pl-c1">ON_CLICKED</span><span class="pl-kos">,</span> <span class="pl-kos">(</span><span class="pl-s1">e</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-kos">{</span>
+      <span class="pl-smi">console</span><span class="pl-kos">.</span><span class="pl-en">log</span><span class="pl-kos">(</span><span class="pl-s">"ON_CLICKED"</span><span class="pl-kos">,</span> <span class="pl-s1">e</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">adMostOnCompleteEvent</span> <span class="pl-c1">=</span> <span class="pl-v">AdMostEventEmitter</span><span class="pl-kos">.</span><span class="pl-en">addListener</span><span class="pl-kos">(</span><span class="pl-v">RewardedAdEvents</span><span class="pl-kos">.</span><span class="pl-c1">ON_COMPLETE</span><span class="pl-kos">,</span> <span class="pl-kos">(</span><span class="pl-s1">e</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-kos">{</span>
+      <span class="pl-smi">console</span><span class="pl-kos">.</span><span class="pl-en">log</span><span class="pl-kos">(</span><span class="pl-s">"ON_COMPLETE"</span><span class="pl-kos">,</span> <span class="pl-s1">e</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">adMostOnDismissEvent</span> <span class="pl-c1">=</span> <span class="pl-v">AdMostEventEmitter</span><span class="pl-kos">.</span><span class="pl-en">addListener</span><span class="pl-kos">(</span><span class="pl-v">RewardedAdEvents</span><span class="pl-kos">.</span><span class="pl-c1">ON_DISMISS</span><span class="pl-kos">,</span> <span class="pl-kos">(</span><span class="pl-s1">e</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-kos">{</span>
+      <span class="pl-smi">console</span><span class="pl-kos">.</span><span class="pl-en">log</span><span class="pl-kos">(</span><span class="pl-s">"ON_DISMISS"</span><span class="pl-kos">,</span> <span class="pl-s1">e</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">adMostOnStatusChangedEvent</span> <span class="pl-c1">=</span> <span class="pl-v">AdMostEventEmitter</span><span class="pl-kos">.</span><span class="pl-en">addListener</span><span class="pl-kos">(</span><span class="pl-v">RewardedAdEvents</span><span class="pl-kos">.</span><span class="pl-c1">ON_STATUS_CHANGED</span><span class="pl-kos">,</span> <span class="pl-kos">(</span><span class="pl-s1">e</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-kos">{</span>
+      <span class="pl-smi">console</span><span class="pl-kos">.</span><span class="pl-en">log</span><span class="pl-kos">(</span><span class="pl-s">"ON_STATUS_CHANGED"</span><span class="pl-kos">,</span> <span class="pl-s1">e</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+  <span class="pl-kos">}</span>
+
+  <span class="pl-en">clearListeners</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">adMostOnReadyEvent</span><span class="pl-kos">.</span><span class="pl-en">remove</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">adMostOnFailEvent</span><span class="pl-kos">.</span><span class="pl-en">remove</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">adMostOnShownEvent</span><span class="pl-kos">.</span><span class="pl-en">remove</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">adMostOnClickedEvent</span><span class="pl-kos">.</span><span class="pl-en">remove</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">adMostOnCompleteEvent</span><span class="pl-kos">.</span><span class="pl-en">remove</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">adMostOnDismissEvent</span><span class="pl-kos">.</span><span class="pl-en">remove</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-c1">adMostOnStatusChangedEvent</span><span class="pl-kos">.</span><span class="pl-en">remove</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+  <span class="pl-kos">}</span>
+
+  <span class="pl-en">render</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-k">return</span> <span class="pl-kos">(</span>
+      <span class="pl-c1">&lt;</span><span class="pl-ent">View</span> <span class="pl-c1">style</span><span class="pl-c1">=</span><span class="pl-kos">{</span><span class="pl-kos">{</span> <span class="pl-c1">flex</span>: <span class="pl-c1">1</span> <span class="pl-kos">}</span><span class="pl-kos">}</span><span class="pl-c1">&gt;</span>
+        <span class="pl-c1">&lt;</span><span class="pl-ent">Button</span>
+          <span class="pl-c1">onPress</span><span class="pl-c1">=</span><span class="pl-kos">{</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-v">AdMostRewarded</span><span class="pl-kos">.</span><span class="pl-en">loadAd</span><span class="pl-kos">(</span><span class="pl-s">"&lt;zone-id&gt;"</span><span class="pl-kos">)</span><span class="pl-kos">}</span>
+          <span class="pl-c1">title</span><span class="pl-c1">=</span><span class="pl-s">"Load Ad"</span>
+          <span class="pl-c1">color</span><span class="pl-c1">=</span><span class="pl-s">"red"</span>
+        <span class="pl-c1">/</span><span class="pl-c1">&gt;</span>
+      <span class="pl-c1">&lt;</span><span class="pl-c1">/</span><span class="pl-ent">View</span><span class="pl-c1">&gt;</span>
+    <span class="pl-kos">)</span><span class="pl-kos">;</span>
+  <span class="pl-kos">}</span>
+<span class="pl-kos">}</span></pre>
+
+                <h2 id="extras">Extras</h2>
+
+                <h3 id="senduserid">Setting Application User Id </h3>
+
+                <p>
+                    You can use the following method to set application specific user id in Admost Analytics for enhanced tracking of your users. You should to call this method before initialization.
+                </p>
+
+				<pre><code class="language-markup">
+AdMost.initAdMost({
+    …
+    userId: undefined,
+});                 
+</code></pre>
+
+
+                <h3 id="adjustintegration">Adjust Integration</h3>
+                <p>
+                    Follow the official <a target="_blank" href="https://github.com/adjust/flutter_sdk#qs-getting-started">ADJUST</a> documents to integrate
+                AdjustSDK in to your app.
+                </p>
+
+               
+
+
+                <h3 id="appsflyerintegration">AppsFlyer Integration </h3>
+                <p>
+                    Follow the official <a target="_blank" href="https://support.appsflyer.com/hc/en-us/articles/360002691537-Flutter-plugin">APPSFLYER</a> documents to integrate
+                AppsFlyerSDK in to your app.
+                </p>
+
+                <h3 id="appprivacy">Apple App Privacy (IOS Only)</h3>
+
+                <p>                
+Starting December 8, 2020, Apple has announced a privacy disclosure for the App Store, You must define which data are collected by your apps and any SDKs you have integrated. To improve the performance of AdMost, the AMRSDK may collect following information from your apps:
+                </p>
+
+                <ul>
+                    <li><b>User ID</b> – If you are using <code>setUserId</code> method to identify users with your custom app user ID, you will need to select 'User ID'
+                    </li>
+                    <li><b>Purchases</b> – If you are using in app purchase trackings methods, you will need to select 'Purchases'
+                    </li>
+                    <li><b>Coarse Location</b> – To estimate the general location of a device
+                    </li>
+                    <li><b>Product Interaction</b> – Analytics purposes
+                    </li>
+                    <li><b>Advertising Data</b> – Analytics purposes
+                    </li>
+                </ul>
+
+            </section>
+        </article>
+        <!-- END Main content -->
+    </div>
+</main>
+
+
+<!-- Footer -->
+<footer class="site-footer">
+    <div class="container">
+        <a id="scroll-up" href="#"><i class="fa fa-angle-up"></i></a>
+
+        <div class="row">
+            <div class="col-md-6 col-sm-6">
+                <p>Copyright &copy; 2017. All right reserved</p>
+            </div>
+            <div class="col-md-6 col-sm-6">
+                <ul class="footer-menu">
+                    <li><a href="http://admost.github.io/amrandroid">Android integration</a></li>
+                    <li><a href="http://admost.github.io/amrios">iOS Integration</a></li>
+                    <li><a href="mailto:amr@admost.com">Contact us</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- END Footer -->
+
+<!-- Scripts -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script>
+    window.jQuery || document.write('<script src="assets/js/vendor/jquery.min.js"><\/script>')
+</script>
+<script>function copyToClipboard(element) {
+    var $temp = $("<input>");
+    $("body").append($temp);
+    $temp.val($(element).text()).select();
+    document.execCommand("copy");
+    $temp.remove();
+}
+</script>
+<script>
+amrInitPage();
+</script>
+<script src="assets/js/theDocs.all.min.js"></script>
+<script src="assets/js/custom.js"></script>
+
+</body>
+</html>
