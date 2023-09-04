@@ -3,8 +3,6 @@ var dataAndroid;
 var htmlString = "";
 var arrayAppGradlePackages = [];
 var combinedData;
-var htmlAndroidManifest = '<div class="col-md-11"> <p> Add the following lines inside <var> &lt;application&gt;</var> tags in <code>/app/src/main/AndroidManifest.xml</code> file </div><div class="col-md-1"> </div><div class="col-md-12" id="file-androidmanifest"> <pre><code id="code-androidmanifest"></code></pre> </div>';
-
 
 function amrInitPage() {
     responseIOS = httpGet("https://admost.github.io/amrios/networks.json");
@@ -235,7 +233,7 @@ function fillAndroidFiles() {
                         if (element.transitive == true) {
                             dependencies = dependencies + "implementation('" + element.package + "') {<br>transitive = true<br>}<br>";
                         }
-                        else {
+                        else if(combinedData[i].android.name !="AMR") {
                             dependencies = dependencies + "implementation '" + element.package + "' <br>";
                         }
                     }
@@ -268,7 +266,6 @@ function fillAndroidFiles() {
             }
         }
     }
-    $('#file-androidmanifest').html(htmlAndroidManifest);
     $('#code-androidmanifest').html(manifest);
     $('#code-projectgradle').html(repositories);
     $('#code-dependencies').html(dependencies);
@@ -348,12 +345,15 @@ function fillAdNetworkList() {
 }
 
 function fillPodFileCode() {
-    $('#file-pod').html("# Uncomment this line to define a global platform for your project \n# platform :ios, '9.0' \nuse_frameworks! target 'MyAwesomeTarget' do\n\rs.dependency 'React'\ns.dependency 'AMRSDK'\n");
+    $('#file-pod').html("source'https://github.com/CocoaPods/Specs.git'\n# platform :ios, '9.0' \n\ntarget 'MyAwesomeTarget' do\nuse_frameworks! :linkage => :static\r");
 
     for (var i = 0; i < combinedData.length; i++) {
-        if (combinedData[i].ios.adapterName && combinedData[i].ios.status == true && document.getElementById("file-pod").innerHTML.indexOf(combinedData[i].ios.adapterName) == -1) {
-            $('#file-pod').append("s.dependency \'" + combinedData[i].ios.adapterName + "\'\n");
+        if (combinedData[i].ios.adapterName && combinedData[i].ios.status == true && document.getElementById("file-pod").innerHTML.indexOf(combinedData[i].ios.adapterName) == -1 && combinedData[i].ios.adapterName != "AMRSDK") {
+            $('#file-pod').append("pod \'" + combinedData[i].ios.adapterName + "\','~>" +combinedData[i].ios.podVersion+"'\n");
+            
         }
+        
+
     }
     $('#file-pod').append("\nend");
 }
